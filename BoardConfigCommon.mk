@@ -105,12 +105,6 @@ BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
 endif
 
-# Nfc
-ifeq ($(BOARD_HAS_NFC),true)
-BOARD_NFC_CHIPSET := pn547
-BOARD_NFC_DEVICE := "/dev/pn547"
-endif
-
 # Audio
 BOARD_USES_ALSA_AUDIO := true
 AUDIO_FEATURE_ENABLED_HWDEP_CAL := true
