@@ -136,8 +136,9 @@ PRODUCT_PACKAGES += \
     gralloc.msm8226 \
     hwcomposer.msm8226 \
     memtrack.msm8226 \
-    nfc_nci.pn54x.default \
-    power.msm8226
+    power.msm8226 \
+    sensors.msm8226 \
+    sensors.qcom
 
 # OMX
 PRODUCT_PACKAGES += \
@@ -164,6 +165,7 @@ PRODUCT_PACKAGES += \
     camera.msm8226 \
     Snap
 
+ifeq ($(BOARD_HAS_NFC), true)
 # NFC packages
 PRODUCT_PACKAGES += \
     NfcNci \
@@ -182,6 +184,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
 
 NFCEE_ACCESS_PATH := $(LOCAL_PATH)/prebuilt/etc/nfcee_access.xml
+endif
 
 # System properties
 -include $(LOCAL_PATH)/system_prop.mk
