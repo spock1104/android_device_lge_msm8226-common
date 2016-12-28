@@ -239,18 +239,24 @@ LOCAL_CFLAGS += -D__RAM_DATA_LOG_SUPPORT__
 endif
 
 # quiet, error, warning, notice, information, debug
+#define LOG_LEVEL_Q 0   /* quiet */
+#define LOG_LEVEL_E 3
+#define LOG_LEVEL_W 4
+#define LOG_LEVEL_N 5
+#define LOG_LEVEL_I 6
+#define LOG_LEVEL_D 7
 ifeq (quiet, $(debug_trace_level))
-LOCAL_CFLAGS += -DCFG_LOG_LEVEL=LOG_LEVEL_Q
+LOCAL_CFLAGS += -DCFG_LOG_LEVEL=0
 else ifeq (error, $(debug_trace_level))
-LOCAL_CFLAGS += -DCFG_LOG_LEVEL=LOG_LEVEL_E
+LOCAL_CFLAGS += -DCFG_LOG_LEVEL=3
 else ifeq (warning, $(debug_trace_level))
-LOCAL_CFLAGS += -DCFG_LOG_LEVEL=LOG_LEVEL_W
+LOCAL_CFLAGS += -DCFG_LOG_LEVEL=4
 else ifeq (notice, $(debug_trace_level))
-LOCAL_CFLAGS += -DCFG_LOG_LEVEL=LOG_LEVEL_N
+LOCAL_CFLAGS += -DCFG_LOG_LEVEL=5
 else ifeq (information, $(debug_trace_level))
-LOCAL_CFLAGS += -DCFG_LOG_LEVEL=LOG_LEVEL_I
+LOCAL_CFLAGS += -DCFG_LOG_LEVEL=6
 else ifeq (debug, $(debug_trace_level))
-LOCAL_CFLAGS += -DCFG_LOG_LEVEL=LOG_LEVEL_D
+LOCAL_CFLAGS += -DCFG_LOG_LEVEL=7
 endif
 
 ifeq (file, $(debug_log_method))
