@@ -240,10 +240,15 @@ static int hw_acc_read_xyzdata(void *data) {
     sensor_data_ival_t *val = (sensor_data_ival_t *) data;
 
     err = hw_acc_read_xyzdata_fr(val);
+/* TODO this is a hack to work around the seemingly non-functional hw_remap_sensor_data
     if (g_place_a >= 0) {
         hw_remap_sensor_data(val, axis_remap_tab_a + g_place_a);
     }
-
+*/
+    int32_t swap_tmp = val->x;
+    val->x = val->y;
+    val->y = 0 - swap_tmp;
+//end hack
     return err;
 }
 
@@ -289,10 +294,15 @@ static int hw_acc_read_xyzdata_input_ev(void *data) {
     val->y = val->y >> (16 - HW_INFO_BITWIDTH_A);
     val->z = val->z >> (16 - HW_INFO_BITWIDTH_A);
 #endif
+/* TODO this is a hack to work around the seemingly non-functional hw_remap_sensor_data
     if (g_place_a >= 0) {
         hw_remap_sensor_data(val, axis_remap_tab_a + g_place_a);
     }
-
+*/
+    int32_t swap_tmp = val->x;
+    val->x = val->y;
+    val->y = 0 - swap_tmp;
+// end hack
     return err;
 }
 
