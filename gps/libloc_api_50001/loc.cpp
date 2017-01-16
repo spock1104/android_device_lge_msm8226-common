@@ -103,7 +103,6 @@ static int  loc_agps_open(const char* apn);
 static int  loc_agps_closed();
 static int  loc_agps_open_failed();
 static int  loc_agps_set_server(AGpsType type, const char *hostname, int port);
-static int  loc_agps_open_with_apniptype( const char* apn, ApnIpType apnIpType);
 
 static const AGpsInterface sLocEngAGpsInterface =
 {
@@ -112,8 +111,7 @@ static const AGpsInterface sLocEngAGpsInterface =
    loc_agps_open,
    loc_agps_closed,
    loc_agps_open_failed,
-   loc_agps_set_server,
-   loc_agps_open_with_apniptype
+   loc_agps_set_server
 };
 
 static int loc_xtra_init(GpsXtraCallbacks* callbacks);
@@ -193,7 +191,7 @@ static const GnssConfigurationInterface sLocEngConfigInterface =
 
 static loc_eng_data_s_type loc_afw_data;
 static int gss_fd = -1;
-
+static int sGnssType = GNSS_UNKNOWN;
 /*===========================================================================
 FUNCTION    gps_get_hardware_interface
 
@@ -245,8 +243,8 @@ extern "C" const GpsInterface* get_gps_interface()
     target = loc_get_target();
     LOC_LOGD("Target name check returned %s", loc_get_target_name(target));
 
-    int gnssType = getTargetGnssType(target);
-    switch (gnssType)
+    sGnssType = getTargetGnssType(target);
+    switch (sGnssType)
     {
     case GNSS_GSS:
     case GNSS_AUTO:
@@ -838,50 +836,6 @@ static int loc_agps_open(const char* apn)
 }
 
 /*===========================================================================
-FUNCTION    loc_agps_open_with_apniptype
-
-DESCRIPTION
-   This function is called when on-demand data connection opening is successful.
-It should inform ARM 9 about the data open result.
-
-DEPENDENCIES
-   NONE
-
-RETURN VALUE
-   0
-
-SIDE EFFECTS
-   N/A
-
-===========================================================================*/
-static int  loc_agps_open_with_apniptype(const char* apn, ApnIpType apnIpType)
-{
-    ENTRY_LOG();
-    AGpsType agpsType = AGPS_TYPE_SUPL;
-    AGpsBearerType bearerType;
-
-    switch (apnIpType) {
-        case APN_IP_IPV4:
-            bearerType = AGPS_APN_BEARER_IPV4;
-            break;
-        case APN_IP_IPV6:
-            bearerType = AGPS_APN_BEARER_IPV6;
-            break;
-        case APN_IP_IPV4V6:
-            bearerType = AGPS_APN_BEARER_IPV4V6;
-            break;
-        default:
-            bearerType = AGPS_APN_BEARER_INVALID;
-            break;
-    }
-
-    int ret_val = loc_eng_agps_open(loc_afw_data, agpsType, apn, bearerType);
-
-    EXIT_LOG(%d, ret_val);
-    return ret_val;
-}
-
-/*===========================================================================
 FUNCTION    loc_agps_closed
 
 DESCRIPTION
@@ -1128,6 +1082,15 @@ static void loc_configuration_update(const char* config_data, int32_t length)
 {
     ENTRY_LOG();
     loc_eng_configuration_update(loc_afw_data, config_data, length);
+    switch (sGnssType)
+    {
+    case GNSS_GSS:
+    case GNSS_AUTO:
+    case GNSS_QCA1530:
+        //APQ
+        gps_conf.CAPABILITIES &= ~(GPS_CAPABILITY_MSA | GPS_CAPABILITY_MSB);
+        break;
+    }
     EXIT_LOG(%s, VOID_RET);
 }
 
