@@ -192,10 +192,14 @@ static int hw_mag_read_xyzdata(void *data) {
     }
 
     hw_mag_validate_val(val);
-
+/* TODO this is a hack to work around the seemingly non-functional hw_remap_sensor_data
     if (g_place_m >= 0) {
         hw_remap_sensor_data(val, axis_remap_tab_m + g_place_m);
     }
+*/
+    val->x = 0 - val->x;
+    val->y = 0 - val->y;
+// end hack    
 
     PDEBUG("[mag] x: %hd y: %hd z: %hd", val->x, val->y, val->z);
     return err;
@@ -239,10 +243,14 @@ static int hw_mag_read_xyzdata_input_ev(void *data) {
     }
 
     hw_mag_validate_val(val);
+/* TODO this is a hack to work around the seemingly non-functional hw_remap_sensor_data
     if (g_place_m >= 0) {
         hw_remap_sensor_data(val, axis_remap_tab_m + g_place_m);
     }
-
+*/
+    val->x = 0 - val->x;
+    val->y = 0 - val->y;
+// end hack
     return err;
 }
 

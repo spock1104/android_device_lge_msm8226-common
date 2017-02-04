@@ -168,11 +168,15 @@ static int hw_gyro_read_xyzdata_input_ev(void *data) {
             break;
         }
     }
-
+/* TODO this is a hack to work around the seemingly non-functional hw_remap_sensor_data
     if (g_place_g >= 0) {
         hw_remap_sensor_data(val, axis_remap_tab_g + g_place_g);
     }
-
+*/
+    int32_t swap_tmp = val->x;
+    val->x = val->y;
+    val->y = 0 - swap_tmp;
+// end hack
     return err;
 }
 
@@ -201,11 +205,15 @@ static int hw_gyro_read_xyzdata(void *data) {
             PERR("error reading from acc");
         }
     }
-
+/* TODO this is a hack to work around the seemingly non-functional hw_remap_sensor_data
     if (g_place_g >= 0) {
         hw_remap_sensor_data(val, axis_remap_tab_g + g_place_g);
     }
-
+*/
+    int32_t swap_tmp = val->x;
+    val->x = val->y;
+    val->y = 0 - swap_tmp;
+// end hack
     PDEBUG("[gyro] x: %d y: %d z: %d", val->x, val->y, val->z);
 
     return err;

@@ -34,6 +34,8 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
 #include <hardware/gps.h>
 
@@ -151,7 +153,7 @@ typedef struct {
     AGpsExtType type;
     AGpsStatusValue status;
     uint32_t        ipv4_addr;
-    struct sockaddr_storage addr;
+    char            ipv6_addr[16];
     char            ssid[SSID_BUF_SIZE];
     char            password[SSID_BUF_SIZE];
 } AGpsExtStatus;
