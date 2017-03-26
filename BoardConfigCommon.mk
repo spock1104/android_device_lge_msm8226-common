@@ -39,7 +39,7 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_MEMCPY_BASE_OPT_DISABLE := true
-TARGET_CPU_VARIANT := krait
+TARGET_CPU_VARIANT := cortex-a7
 MALLOC_IMPL := dlmalloc
 USE_CLANG_PLATFORM_BUILD := true
 TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
